@@ -51,6 +51,24 @@ app.get("/users/new", (req, res) => {
 	});
 });
 
+// USERS : NEW USER >> POST
+app.post("/users/new", async (req, res) => {
+	const { username, password } = req.body;
+
+	// let user = await UserModel.findOne({  });
+
+	// if (user) {
+	// 	return res.redirect("/register");
+	// }
+
+	const hashedPassword = await bcrypt.hash(password, 12);
+	// user = new UserModel({ username, password: hashedPassword });
+	// await user.save();
+	let user = { username, password: hashedPassword };
+	console.log(`User created: ${username} and ${hashedPassword}`);
+	res.redirect("/");
+});
+
 // ===========================//
 
 const start = async () => {
