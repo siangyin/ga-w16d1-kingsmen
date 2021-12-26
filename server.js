@@ -21,12 +21,34 @@ app.use(methodOverride("_method"));
 
 // MAIN Landing page
 app.get("/", (req, res) => {
-	res.render("index.ejs", { title: "KINGSMAN TAILOR" });
+	res.render("index.ejs", {
+		title: "Kingsman",
+		headerh1: "KINGSMAN TAILOR",
+	});
+});
+
+// SESSIONS - LOGIN page
+app.get("/sessions/login", (req, res) => {
+	res.render("sessions/login.ejs", {
+		title: "Kingsman",
+		headerh1: "KINGSMAN TAILOR",
+	});
 });
 
 // ROOM page
 app.get("/room", (req, res) => {
-	res.render("room/index.ejs", { title: "MANNERS. MAKETH. MAN." });
+	res.render("room/index.ejs", {
+		title: "Kingsman: The Secret Service",
+		headerh1: "MANNERS. MAKETH. MAN.",
+	});
+});
+
+// USERS : NEW USER page
+app.get("/users/new", (req, res) => {
+	res.render("users/new.ejs", {
+		title: "Kingsman: The Secret Service",
+		headerh1: "MANNERS. MAKETH. MAN.",
+	});
 });
 
 // ===========================//

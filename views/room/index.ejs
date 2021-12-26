@@ -1,43 +1,17 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Kingsman: The Secret Service</title>
-		<!-- FONTS -->
-		<link
-			href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700"
-			rel="stylesheet"
-		/>
-		<!-- CSS -->
-		<link rel="stylesheet" href="css/style.css" />
-	</head>
+	<%- include("../partials/head") %>
 	<body>
-		<!-- ====== TOP HEADER BAR ====== -->
-		<div class="header">
-			<!-- title -->
-			<div class="header-title">
-				<img src="img/logo.png" alt="kingsman logo" />
-				<div>
-					<h1>MANNERS. MAKETH. MAN.</h1>
-				</div>
-			</div>
-			<!-- navigation -->
-			<div class="header-nav">
-				<ul>
-					<!-- fitting room link -->
-					<li><a href="/room">fitting room three</a></li>
-					<!-- add your form button to log out here -->
-					<li></li>
-				</ul>
-			</div>
-		</div>
-		<!-- ===== MAIN FITTING ROOM 3 CONTENT ===== -->
+		<%- include("../partials/nav") %>
+
+		<!-- ===== PRIVATE FITTING ROOM 3 CONTENT ===== -->
+
 		<div class="main">
 			<!-- image -->
-			<img src="img/fittingroom.jpg" alt="a kingsman's wardrobe" />
+			<img src="/img/fittingroom.jpg" alt="a kingsman's wardrobe" />
 			<!-- main content -->
 			<div class="main-abt">
-				<h1>access granted: welcome to fitting room 3</h1>
+				<h1 class="text-capitalize fw-bold pt-3 text-warning">access granted: welcome to fitting room 3</h1>
 				Welcome agents, here in fitting room three you can post classified
 				messages to fellow agents. Please make sure you keep your username and
 				password safe at all times so no one else can acccess this page. And
@@ -47,19 +21,24 @@
 			<!-- messages -->
 			<div class="main-messages">
 				<!-- post a new message form -->
-				<h1>post a message</h1>
+				<h1 class="text-capitalize fs-3 fw-bold pt-3 ">post a message</h1>
 				<form class="new-messages" action="/room/new" method="post">
-					<textarea
+					<textarea class="text-capitalize
 						name="message"
 						placeholder="TYPE YOUR MESSAGE HERE..."
 					></textarea>
 					<input type="submit" value="POST" />
 				</form>
 				<!-- displays all messages -->
-				<h1>the message board</h1>
-		
-				<div class="main-message">user msg</div>
-				
+				<h1 class="text-capitalize fs-3 fw-bold pt-3">the message board</h1>
+
+				<div class="card text-dark bg-warning mb-3" style="max-width: 18rem;">
+  <div class="card-header">20 dec 2020</div>
+  <div class="card-body">
+    <h5 class="card-title">user123</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+</div>
 			</div>
 		</div>
 	</body>
