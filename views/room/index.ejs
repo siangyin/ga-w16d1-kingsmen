@@ -11,34 +11,43 @@
 			<img src="/img/fittingroom.jpg" alt="a kingsman's wardrobe" />
 			<!-- main content -->
 			<div class="main-abt">
-				<h1 class="text-capitalize fw-bold pt-3 text-warning">access granted: welcome to fitting room 3</h1>
+				<h1 class="text-capitalize fw-bold pt-3 text-warning">
+					access granted: welcome to fitting room 3
+				</h1>
 				Welcome agents, here in fitting room three you can post classified
 				messages to fellow agents. Please make sure you keep your username and
 				password safe at all times so no one else can acccess this page. And
 				remember, we kingsmen are the new knights. So what do you say we save
 				the world?
 			</div>
+
 			<!-- messages -->
 			<div class="main-messages">
 				<!-- post a new message form -->
-				<h1 class="text-capitalize fs-3 fw-bold pt-3 ">post a message</h1>
-				<form class="new-messages" action="/room/new" method="post">
-					<textarea class="text-capitalize
-						name="message"
+				<h1 class="text-capitalize fs-3 fw-bold pt-3">post a message</h1>
+				<form class="new-messages" action="/room" method="POST">
+					<textarea
+						class="text-capitalize"
+						type="text"
+						name="messages"
 						placeholder="TYPE YOUR MESSAGE HERE..."
 					></textarea>
-					<input type="submit" value="POST" />
+					<button type="submit" class="btn btn-outline-dark">Post</button>
 				</form>
+
 				<!-- displays all messages -->
 				<h1 class="text-capitalize fs-3 fw-bold pt-3">the message board</h1>
 
-				<div class="card text-dark bg-warning mb-3" style="max-width: 18rem;">
-  <div class="card-header">20 dec 2020</div>
-  <div class="card-body">
-    <h5 class="card-title">user123</h5>
-    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-  </div>
-</div>
+				<div class="card text-dark bg-warning mb-3" style="max-width: 18rem">
+					<div class="card-header">20 dec 2020</div>
+					<div class="card-body">
+						<h5 class="card-title">user123</h5>
+						<p class="card-text">
+							Some quick example text to build on the card title and make up the
+							bulk of the card's content.
+						</p>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

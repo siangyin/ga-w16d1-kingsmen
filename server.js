@@ -97,13 +97,38 @@ app.post("/sessions/login", async (req, res) => {
 });
 
 // ROOM page
-app.get("/room", isAuth, (req, res) => {
+app.get("/room", isAuth, async (req, res) => {
 	const currSessionUser = req.session.username;
+	const allDB = await UserModel.find({});
+	const allmsg = await allDB.map((user) => {
+		if (user.messages) {
+			const { _id: userID, username } = user;
+			user.messages.map((msg) => {
+				const newObj = { username, userID, msg };
+				return newObj;
+			});
+		}
+	});
+	console.log(allmsg);
 	res.render("room/index.ejs", {
 		title: "Kingsman: The Secret Service",
 		headerh1: "MANNERS. MAKETH. MAN.",
 		currUser: currSessionUser,
+		data: [],
 	});
+});
+
+app.post("/room", (req, res) => {
+	UserModel.findOneAndUpdate(
+		{ username: req.session.username },
+		// uses $push method to push the req.body.message
+		{ $push: { messages: req.body.message } },
+		// callback
+		(err, foundUser) => {
+			// redirects to the room page
+			res.redirect("/room");
+		}
+	);
 });
 
 // USERS : NEW USER page
