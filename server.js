@@ -42,25 +42,67 @@ const isAuth = require("./middlewares/isAuth");
 // MAIN Landing page
 app.get("/", (req, res) => {
 	// req.session.isAuth = true;
+	const currSessionUser = req.session.username;
 	res.render("index.ejs", {
 		title: "Kingsman",
 		headerh1: "KINGSMAN TAILOR",
+		currUser: currSessionUser,
 	});
 });
 
 // SESSIONS - LOGIN page
 app.get("/sessions/login", (req, res) => {
+	const error = req.session.error;
+	delete req.session.error;
+	const currSessionUser = req.session.username;
 	res.render("sessions/login.ejs", {
 		title: "Kingsman",
 		headerh1: "KINGSMAN TAILOR",
+		error: error,
+		currUser: currSessionUser,
 	});
 });
 
+// SESSIONS - LOGIN page
+app.post("/sessions/login", async (req, res) => {
+	const currSessionUser = req.session.username;
+	try {
+		const error = req.session.error;
+		delete req.session.error;
+		const { username, password } = req.body;
+		let user = await UserModel.findOne({ username });
+		if (!user) {
+			req.session.error = "Invalid Credentials";
+			return res.redirect("/sessions/login");
+		}
+
+		const isMatch = await bcrypt.compare(password, user.password);
+
+		if (!isMatch) {
+			req.session.error = "Invalid Credentials";
+			return res.redirect("sessions/login.ejs", {
+				title: "Kingsman",
+				headerh1: "KINGSMAN TAILOR",
+				error: error,
+				currUser: currSessionUser,
+			});
+		}
+
+		req.session.isAuth = true;
+		req.session.username = user.username;
+		res.redirect("/room");
+	} catch (error) {
+		console.log(error);
+	}
+});
+
 // ROOM page
-app.get("/room", (req, res) => {
+app.get("/room", isAuth, (req, res) => {
+	const currSessionUser = req.session.username;
 	res.render("room/index.ejs", {
 		title: "Kingsman: The Secret Service",
 		headerh1: "MANNERS. MAKETH. MAN.",
+		currUser: currSessionUser,
 	});
 });
 
@@ -68,10 +110,12 @@ app.get("/room", (req, res) => {
 app.get("/users/new", (req, res) => {
 	const error = req.session.error;
 	delete req.session.error;
+	const currSessionUser = req.session.username;
 	res.render("users/new.ejs", {
 		title: "Kingsman: The Secret Service",
 		headerh1: "MANNERS. MAKETH. MAN.",
 		error: error,
+		currUser: currSessionUser,
 	});
 });
 
@@ -106,20 +150,25 @@ app.get("/logout", (req, res) => {
 	});
 });
 
-// SEED : NEW USER >> POST
+// SEED ROUTE
+// NOTE: Do NOT run this route until AFTER you have a create user route up and running, as well as encryption working!
 const seed = require("./models/seed.js");
 
 app.get("/seedAgents", async (req, res) => {
-	const error = req.session.error;
-	delete req.session.error;
-
-	// encrypts the given seed passwords
-	seed.forEach(async (user) => {
-		user.password = await bcrypt.hash(user.password, 10);
-		// seed data
-		await User.findOneAndUpdate({ name: user.name }, user, { upsert: true });
-	});
-	res.redirect("/");
+	try {
+		const newData = seed.forEach(async (user) => {
+			const { username, password, messages } = user;
+			const hashPW = await bcrypt.hash(password, 12);
+			const newUser = await UserModel.create({
+				username,
+				password: hashPW,
+				messages,
+			});
+		});
+		res.redirect("/");
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 // ===========================//
