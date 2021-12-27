@@ -1,8 +1,17 @@
 <div class="header">
 	<!-- title -->
-	<div class="header-title">
-		<img src="/img/logo.png" alt="kingsman logo" />
-		<h1><%= headerh1 %></h1>
+	<div class="header-title nav-bar">
+		<a
+			href="/"
+			class="
+				text-decoration-none
+				navbar-brand
+				text-uppercase
+				font-weight-bold
+				text-dark
+			"
+			><img src="/img/logo.png" alt="kingsman logo" /><%= headerh1 %></a
+		>
 	</div>
 	<!-- navigation -->
 	<div class="header-nav">
@@ -24,7 +33,7 @@
 			</button></a
 		>
 
-		<a href="/">
+		<a href="/logout">
 			<button class="btn btn-outline-warning text-dark border-0">
 				Logout
 			</button></a

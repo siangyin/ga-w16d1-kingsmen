@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const MongoDBSession = require("connect-mongodb-session")(session);
 const connectDB = require("./db/connectDB");
+const UserModel = require("./models/User");
 
 const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
@@ -17,10 +18,30 @@ app.use(express.static("public"));
 app.use(methodOverride("_method"));
 
 // ===================================//
+// ________ SESSIONS ___________//
+
+// Session collection data storing
+const store = new MongoDBSession({
+	uri: process.env.MONGO_URI,
+	collection: "session",
+});
+
+app.use(
+	session({
+		secret: process.env.SECRET,
+		resave: false,
+		saveUninitialized: false,
+		store: store,
+	})
+);
+
+// ===================================//
 // ________ ROUTES : PAGES ___________//
+const isAuth = require("./middlewares/isAuth");
 
 // MAIN Landing page
 app.get("/", (req, res) => {
+	// req.session.isAuth = true;
 	res.render("index.ejs", {
 		title: "Kingsman",
 		headerh1: "KINGSMAN TAILOR",
@@ -45,27 +66,59 @@ app.get("/room", (req, res) => {
 
 // USERS : NEW USER page
 app.get("/users/new", (req, res) => {
+	const error = req.session.error;
+	delete req.session.error;
 	res.render("users/new.ejs", {
 		title: "Kingsman: The Secret Service",
 		headerh1: "MANNERS. MAKETH. MAN.",
+		error: error,
 	});
 });
 
 // USERS : NEW USER >> POST
 app.post("/users/new", async (req, res) => {
-	const { username, password } = req.body;
+	const error = req.session.error;
+	delete req.session.error;
 
-	// let user = await UserModel.findOne({  });
+	try {
+		const { username, password } = req.body;
+		const hashedPassword = await bcrypt.hash(password, 12);
+		let user = await UserModel.findOne({ username });
+		if (user) {
+			req.session.error = "username exist please login";
+			res.redirect("/users/new");
+		} else {
+			user = new UserModel({ username, password: hashedPassword });
+			await user.save();
+			console.log(`OK! User created: ${username}`);
+			res.redirect("/");
+		}
+	} catch (error) {
+		console.log(error);
+	}
+});
 
-	// if (user) {
-	// 	return res.redirect("/register");
-	// }
+// LOGOUT
+app.get("/logout", (req, res) => {
+	req.session.destroy((err) => {
+		if (err) throw err;
+		res.redirect("/");
+	});
+});
 
-	const hashedPassword = await bcrypt.hash(password, 12);
-	// user = new UserModel({ username, password: hashedPassword });
-	// await user.save();
-	let user = { username, password: hashedPassword };
-	console.log(`User created: ${username} and ${hashedPassword}`);
+// SEED : NEW USER >> POST
+const seed = require("./models/seed.js");
+
+app.get("/seedAgents", async (req, res) => {
+	const error = req.session.error;
+	delete req.session.error;
+
+	// encrypts the given seed passwords
+	seed.forEach(async (user) => {
+		user.password = await bcrypt.hash(user.password, 10);
+		// seed data
+		await User.findOneAndUpdate({ name: user.name }, user, { upsert: true });
+	});
 	res.redirect("/");
 });
 

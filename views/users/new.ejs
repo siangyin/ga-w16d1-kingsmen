@@ -25,7 +25,9 @@
 						class="form-control form-control-lg mb-3"
 					/>
 
-					<p class="text-danger">err msg</p>
+					<% if(error) { %>
+					<p class="text-danger"><%= error %></p>
+					<% } %>
 
 					<!-- Submit button -->
 					<button type="submit" class="btn btn-warning btn-lg btn-block">
