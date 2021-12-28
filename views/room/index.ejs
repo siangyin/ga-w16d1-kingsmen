@@ -11,43 +11,55 @@
 			<img src="/img/fittingroom.jpg" alt="a kingsman's wardrobe" />
 			<!-- main content -->
 			<div class="main-abt">
-				<h1 class="text-capitalize fw-bold pt-3 text-warning">
+				<h1 class="text-capitalize fw-bold pt-3 text-dark text-center">
 					access granted: welcome to fitting room 3
 				</h1>
-				Welcome agents, here in fitting room three you can post classified
-				messages to fellow agents. Please make sure you keep your username and
-				password safe at all times so no one else can acccess this page. And
-				remember, we kingsmen are the new knights. So what do you say we save
-				the world?
+				<p>
+					Welcome agents, here in fitting room three you can post classified
+					messages to fellow agents. Please make sure you keep your username and
+					password safe at all times so no one else can acccess this page. And
+					remember, we kingsmen are the new knights. So what do you say we save
+					the world?
+				</p>
 			</div>
 
 			<!-- messages -->
 			<div class="main-messages">
 				<!-- post a new message form -->
-				<h1 class="text-capitalize fs-3 fw-bold pt-3">post a message</h1>
-				<form class="new-messages" action="/room" method="POST">
+				<h1 class="text-capitalize fs-3 fw-bold pt-3 text-center">
+					post a message
+				</h1>
+				<form
+					class="new-messages d-flex flex-column"
+					action="/room"
+					method="POST"
+				>
 					<textarea
 						class="text-capitalize"
 						type="text"
 						name="messages"
 						placeholder="TYPE YOUR MESSAGE HERE..."
 					></textarea>
-					<button type="submit" class="btn btn-outline-dark">Post</button>
+					<button
+						type="submit"
+						class="btn btn-outline-dark d-flex justify-content-center mt-3"
+					>
+						Post
+					</button>
 				</form>
 
 				<!-- displays all messages -->
-				<h1 class="text-capitalize fs-3 fw-bold pt-3">the message board</h1>
-
-				<div class="card text-dark bg-warning mb-3" style="max-width: 18rem">
-					<div class="card-header">20 dec 2020</div>
-					<div class="card-body">
-						<h5 class="card-title">user123</h5>
-						<p class="card-text">
-							Some quick example text to build on the card title and make up the
-							bulk of the card's content.
-						</p>
-					</div>
-				</div>
+				<h1 class="text-capitalize fs-3 fw-bold pt-3 text-center">
+					the message board
+				</h1>
+				<ul class="list-group">
+					<% users.forEach((user) => { %> <% const {username,messages} =user %>
+					<% messages.forEach((msg) => { %>
+					<li class="list-group-item">
+						<strong><%= username %></strong>: <%= msg %>
+					</li>
+					<% }) %> <% }) %>
+				</ul>
 			</div>
 		</div>
 	</body>

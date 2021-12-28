@@ -100,21 +100,12 @@ app.post("/sessions/login", async (req, res) => {
 app.get("/room", isAuth, async (req, res) => {
 	const currSessionUser = req.session.username;
 	const allDB = await UserModel.find({});
-	const allmsg = await allDB.map((user) => {
-		if (user.messages) {
-			const { _id: userID, username } = user;
-			user.messages.map((msg) => {
-				const newObj = { username, userID, msg };
-				return newObj;
-			});
-		}
-	});
-	console.log(allmsg);
+	console.log(allDB);
 	res.render("room/index.ejs", {
 		title: "Kingsman: The Secret Service",
 		headerh1: "MANNERS. MAKETH. MAN.",
 		currUser: currSessionUser,
-		data: [],
+		users: allDB,
 	});
 });
 
