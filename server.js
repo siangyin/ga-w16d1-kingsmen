@@ -100,7 +100,6 @@ app.post("/sessions/login", async (req, res) => {
 app.get("/room", isAuth, async (req, res) => {
 	const currSessionUser = req.session.username;
 	const allDB = await UserModel.find({});
-	console.log(allDB);
 	res.render("room/index.ejs", {
 		title: "Kingsman: The Secret Service",
 		headerh1: "MANNERS. MAKETH. MAN.",
@@ -109,17 +108,19 @@ app.get("/room", isAuth, async (req, res) => {
 	});
 });
 
-app.post("/room", (req, res) => {
-	UserModel.findOneAndUpdate(
-		{ username: req.session.username },
-		// uses $push method to push the req.body.message
-		{ $push: { messages: req.body.message } },
-		// callback
-		(err, foundUser) => {
-			// redirects to the room page
-			res.redirect("/room");
+app.post("/room", async (req, res) => {
+	const newMsg = req.body.messages;
+	const username = req.session.username;
+
+	await UserModel.findOneAndUpdate(
+		{ username },
+		{
+			$push: {
+				messages: newMsg,
+			},
 		}
 	);
+	res.redirect("/room");
 });
 
 // USERS : NEW USER page
